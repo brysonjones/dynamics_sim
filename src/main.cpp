@@ -1,22 +1,27 @@
 
 #include <iostream>
-#include <autodiff/forward/dual.hpp>
+#include <autodiff/forward/real.hpp>
+#include <autodiff/forward/real/eigen.hpp>
+#include "dynamics/rotation.h"
+// using namespace autodiff;
 
-using namespace autodiff;
-
-dual f(dual x)
-{
-    return x*x;
+// The scalar function for which the gradient is needed
+autodiff::real f(const autodiff::ArrayXreal& x) {
+    return (x * x).sum(); // sum([xi * exp(xi) for i = 1:5])
 }
 
-
 int main() {
-    dual x = 3;                                   // the input variable x
-    dual u = f(x);                                // the output variable u
+    VectorXd omega(3);
+    omega << 1, 2, 3;
+    hat(omega);
 
-    double dudx = derivative(f, wrt(x), at(x));   // evaluate the derivative du/dx
+    autodiff::ArrayXreal x(5);                            // the input array x with 5 variables
+    x << 1, 2, 3, 4, 5;                         // x = [1, 2, 3, 4, 5]
 
-    std::cout << "u = " << u << std::endl;        // print the evaluated output u
-    std::cout << "du/dx = " << dudx << std::endl; // print the evaluated derivative du/dx
-    return 0;
+    autodiff::real u;                                     // the output scalar u = f(x) evaluated together with gradient below
+
+    VectorXd g = gradient(f, wrt(x), at(x), u); // evaluate the function value u and its gradient vector g = du/dx
+
+    std::cout << "u = " << u << std::endl;      // print the evaluated output u
+    std::cout << "g = \n" << g << std::endl;    // print the evaluated gradient vector g = du/dx
 }

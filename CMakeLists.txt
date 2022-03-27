@@ -7,6 +7,10 @@ set (CMAKE_CXX_STANDARD 17)
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 include(FetchContent)
 
+# TODO: Eigen should already be found the autodiff repo below, but it is not
+#       fix this to be more robust
+find_package(Eigen3 3.3 REQUIRED) 
+
 # Get Auto-Diff repo
 set(AUTODIFF_BUILD_TESTS OFF)
 set(AUTODIFF_BUILD_PYTHON OFF)
@@ -18,12 +22,6 @@ FetchContent_Declare(
   GIT_TAG        main
 )
 FetchContent_MakeAvailable(autodiff_repo)
-# FetchContent_GetProperties(glm_repo)
-# if(NOT glm_repo_POPULATED)
-#   FetchContent_Populate(glm_repo)
-#   add_subdirectory(${glm_repo_SOURCE_DIR} ${glm_repo_BINARY_DIR})
-#   include_directories(${glm_repo_SOURCE_DIR})
-# endif()
 
 enable_testing()
 
@@ -31,6 +29,6 @@ add_subdirectory(src)
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-target_link_libraries(${PROJECT_NAME} autodiff::autodiff)
+target_link_libraries(${PROJECT_NAME} PRIVATE autodiff::autodiff Eigen3::Eigen)
 
 # target_include_directories(${PROJECT_NAME} autodiff)
