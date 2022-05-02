@@ -2,8 +2,7 @@
 #include <iostream>
 #include <autodiff/forward/real.hpp>
 #include <autodiff/forward/real/eigen.hpp>
-#include "dynamics/rotation.hpp"
-// using namespace autodiff;
+#include "dynamics/box.hpp"
 
 // The scalar function for which the gradient is needed
 autodiff::real f(const autodiff::ArrayXreal& x) {
@@ -11,10 +10,11 @@ autodiff::real f(const autodiff::ArrayXreal& x) {
 }
 
 int main() {
-    Rotation rotation;
-    VectorXd omega(4);
-    omega << 1, 2, 3;
-    rotation.rho(omega);
+    // Simulation Parameters
+    const double h = 0.05;
+    const double Tf = 5.0; // final time (sec)
+
+    Box box;
 
     autodiff::ArrayXreal x(5);                            // the input array x with 5 variables
     x << 1, 2, 3, 4, 5;                         // x = [1, 2, 3, 4, 5]

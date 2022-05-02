@@ -29,6 +29,6 @@ add_subdirectory(src)
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE autodiff::autodiff Eigen3::Eigen rotation)
+target_link_libraries(${PROJECT_NAME} PRIVATE autodiff::autodiff Eigen3::Eigen box)
 
 # target_include_directories(${PROJECT_NAME} autodiff)
